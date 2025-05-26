@@ -1,0 +1,34 @@
+---
+title: "nhanes数据清洗" 
+output: github_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 读取数据
+```{r readData eavl=FALSE}
+if (!requireNamespace("haven", quietly = TRUE)) {
+    stop("请先安装haven包：install.packages('haven')")
+}
+
+# 通过对话框选择文件
+file_path <- file.choose()
+
+# 检查是否选择了文件
+if (length(file_path) == 0 || file_path == "") {
+  stop("未选择文件")
+}
+
+# 获取文件扩展名（转换为小写）
+file_ext <- tolower(tools::file_ext(file_path))
+
+# 根据扩展名读取数据
+
+data <- haven::read_xpt(file_path)
+```
+
+## 数据合并
+
+
+## 数据清洗

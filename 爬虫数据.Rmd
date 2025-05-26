@@ -1,0 +1,47 @@
+---
+title: "爬虫nhanes数据"
+output: 
+  github_document
+---
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 完整示例：爬取并读取人口统计问卷数据
+```{r example}
+if (!require(nhanesA, quietly = TRUE))
+  install.packages("nhanesA")
+
+library(nhanesA)
+
+
+# 下载2017-2018年人口统计数据
+demo_data <- nhanes("DEMO_J")
+```
+
+## 通过 nhanesA 包自动获取 nh_table 名称
+```{r}
+library(nhanesA)
+
+# 列出所有组件（如 Demographics、Laboratory 等）
+components <- c("Demographics", "Dietary", "Examination", "Laboratory", "Questionnaire")
+
+# 定义数据组的缩写（而非全称）
+groups <- c("DEMO", "DIET", "EXAM", "LAB", "Q")  # 对应人口统计、膳食、体检、实验室、问卷
+
+# 获取 2017-2018 年所有表名
+tables <- lapply(groups, function(group) {
+  nhanesTables(data_group = group, year = "2017")  
+})
+
+tables[[1]][["Data.Group"]]= groups[1]
+tables[[2]][["Data.Group"]]= groups[2]
+tables[[3]][["Data.Group"]]= groups[3]
+tables[[4]][["Data.Group"]]= groups[4]
+tables[[5]][["Data.Group"]]= groups[5]
+
+# 合并结果并显示表名
+all_tables <- do.call(rbind, tables)
+# print(all_tables$Data.File.Name)  # 输出如 "DEMO_J", "BPX_J" 等
+```
